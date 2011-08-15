@@ -33,16 +33,17 @@
 
 
 @interface SBJsonUTF8Stream : NSObject {
+@private
     const char *_bytes;
-    NSUInteger _length;
     NSMutableData *_data;
-    NSUInteger _index;
-    NSUInteger _discarded;
+    NSUInteger _length;
 }
 
 @property (assign) NSUInteger index;
 
 - (void)appendData:(NSData*)data_;
+
+- (BOOL)haveRemainingCharacters:(NSUInteger)chars;
 
 - (void)skip;
 - (void)skipWhitespace;
@@ -52,7 +53,6 @@
 - (BOOL)getNextUnichar:(unichar*)ch;
 - (BOOL)getSimpleString:(NSString**)string;
 
-- (BOOL)ensureChars:(NSUInteger)chars;
-- (BOOL)getBytes:(char *)bytes length:(NSUInteger)length;
+- (NSString*)stringWithRange:(NSRange)range;
 
 @end

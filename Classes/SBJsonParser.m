@@ -29,7 +29,6 @@
 
 #import "SBJsonParser.h"
 #import "SBJsonStreamParser.h"
-#import "SBJsonStreamParserAdapter.h"
 #import "SBJsonStreamParserAccumulator.h"
 
 @implementation SBJsonParser
@@ -40,7 +39,7 @@
 - (id)init {
     self = [super init];
     if (self)
-        self.maxDepth = 512;
+        self.maxDepth = 32u;
     return self;
 }
 
@@ -60,12 +59,9 @@
 
 	SBJsonStreamParserAccumulator *accumulator = [[[SBJsonStreamParserAccumulator alloc] init] autorelease];
     
-    SBJsonStreamParserAdapter *adapter = [[[SBJsonStreamParserAdapter alloc] init] autorelease];
-    adapter.delegate = accumulator;
-	
 	SBJsonStreamParser *parser = [[[SBJsonStreamParser alloc] init] autorelease];
 	parser.maxDepth = self.maxDepth;
-	parser.delegate = adapter;
+	parser.delegate = accumulator;
 	
 	switch ([parser parse:data]) {
 		case SBJsonStreamParserComplete:
@@ -95,7 +91,7 @@
     
     if (error_) {
 		NSDictionary *ui = [NSDictionary dictionaryWithObjectsAndKeys:error, NSLocalizedDescriptionKey, nil];
-        *error_ = [NSError errorWithDomain:@"org.brautaset.json.parser.ErrorDomain" code:0 userInfo:ui];
+        *error_ = [NSError errorWithDomain:@"org.brautaset.SBJsonParser.ErrorDomain" code:0 userInfo:ui];
 	}
 	
     return nil;
