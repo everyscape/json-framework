@@ -29,6 +29,7 @@
 
 #import "SBJsonParser.h"
 #import "SBJsonStreamParser.h"
+#import "SBJsonStreamParserAdapter.h"
 #import "SBJsonStreamParserAccumulator.h"
 
 @implementation SBJsonParser
@@ -43,10 +44,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [error release];
-    [super dealloc];
-}
 
 #pragma mark Methods
 
@@ -57,11 +54,14 @@
         return nil;
     }
 
-	SBJsonStreamParserAccumulator *accumulator = [[[SBJsonStreamParserAccumulator alloc] init] autorelease];
+	SBJsonStreamParserAccumulator *accumulator = [[SBJsonStreamParserAccumulator alloc] init];
     
-	SBJsonStreamParser *parser = [[[SBJsonStreamParser alloc] init] autorelease];
+    SBJsonStreamParserAdapter *adapter = [[SBJsonStreamParserAdapter alloc] init];
+    adapter.delegate = accumulator;
+	
+	SBJsonStreamParser *parser = [[SBJsonStreamParser alloc] init];
 	parser.maxDepth = self.maxDepth;
-	parser.delegate = accumulator;
+	parser.delegate = adapter;
 	
 	switch ([parser parse:data]) {
 		case SBJsonStreamParserComplete:
