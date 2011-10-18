@@ -73,7 +73,11 @@ static NSNumber *kNegativeInfinity;
 }
 
 - (void)dealloc {
+	self.error = nil;
     self.state = nil;
+    [stateStack release];
+    [cache release];
+	[super dealloc];
 }
 
 #pragma mark Methods

@@ -58,7 +58,11 @@
 }
 
 - (void)dealloc {
+	self.error = nil;
     self.state = nil;
+	[stateStack release];
+	[tokeniser release];
+	[super dealloc];
 }
 
 #pragma mark Methods

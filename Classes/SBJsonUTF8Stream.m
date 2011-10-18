@@ -44,6 +44,10 @@
     return self;
 }
 
+- (void)dealloc {
+    [_data release];
+    [super dealloc];
+}
 
 - (void)appendData:(NSData *)data_ {
     
@@ -131,7 +135,7 @@
 }
 
 - (NSString*)stringWithRange:(NSRange)range {
-    return [[NSString alloc] initWithBytes:_bytes + range.location length:range.length encoding:NSUTF8StringEncoding];
+    return [[[NSString alloc] initWithBytes:_bytes + range.location length:range.length encoding:NSUTF8StringEncoding] autorelease];
     
 }
 
